@@ -1,4 +1,3 @@
-
 Intent Schema:
 ===================================================
 {
@@ -7,15 +6,10 @@ Intent Schema:
       "intent": "StudyIntent"
     },
     {
-<<<<<<< HEAD
-        "intent": "CreateIntent"
-    },
-
-    {
-        "intent": "AMAZON.StopIntent"
-=======
       "intent": "AMAZON.StopIntent"
->>>>>>> 1445ac17fc6c3fc0d707782d2ad93189578f0871
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
     },
     {
       "intent": "AnswerIntent",
@@ -56,14 +50,8 @@ StudyIntent study
 
 CreateIntent create
 
-<<<<<<< HEAD
-AnswerIntent answer {word|ans}
+NewWordIntent word {word|realword}
 
-NewWordIntent newWord {word|actualWord}
-=======
-NewWordIntent newWord {word|realword}
->>>>>>> ffc7d95dbec25311fcfd3788966b3ca82d359e91
-
-NewDefinitionIntent newWord {word|definition}
+NewDefinitionIntent definition  {the vegetable is green|definition}
 
 AnswerIntent answer {word|ans}
