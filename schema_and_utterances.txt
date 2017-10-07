@@ -25,7 +25,7 @@ Intent Schema:
       "intent": "NewWordIntent",
       "slots": [
         {
-          "name": "actualWord",
+          "name": "realword",
           "type": "AMAZON.LITERAL"
         }
       ]
@@ -48,7 +48,7 @@ StudyIntent study
 
 CreateIntent create
 
-NewWordIntent newWord {word|actualWord}
+NewWordIntent newWord {word|realword}
 
 NewDefinitionIntent newWord {word|definition}
 
