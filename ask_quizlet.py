@@ -7,16 +7,28 @@ ask = Ask(app, "/")
 @ask.launch
 def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
+    session.attributes["test_num"] = 0
     return question(welcome_message)
 
+test_questions = ["ant", "bee", "cow", "dog"]
 @ask.intent("StudyIntent")
-def share_headlines():
-    msg = "Not implemented."
-    return statement(msg)
+def study():
+    msg = "Please say back the word: "
+    msg += test_questions[session.attributes["test_num"]]
+    return question(msg)
 
-@ask.intent("CreateIntent")
-def share_headlines():
-    msg = "Not implemented."
+@ask.intent("AnswerIntent")
+def answer(ans):
+    if ans == test_questions[session.attributes["test_num"]]:
+        session.attributes['test_num'] += 1
+        if session.attributes["test_num"] == len(test_questions):
+            return statement("Congrats, you said all the words.")
+        return study()
+    return question("You fucked up.")
+
+@ask.intent("AMAZON.StopIntent")
+def exit():
+    msg = "Quitting Ask Quizlet."
     return statement(msg)
 
 if __name__ == '__main__':
