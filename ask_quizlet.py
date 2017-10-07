@@ -89,6 +89,15 @@ def add_definition(definition):
         msg = "Please continue the function or stop"
         return question(msg)
 
+@ask.intent("DeleteEntryIntent")
+def delete_word(wordToDelete):
+    if(not session.attributes["final_set"]):
+        msg = "Your set is empty!"
+        return statement(msg)
+    else:
+        session.attributes["final_set"].pop(wordToDelete)
+        msg = "Deleted " + wordToDelete + " and its definition"
+        return statement(msg)
 
 
 @ask.intent("AMAZON.HelpIntent")
@@ -98,7 +107,7 @@ def help():
     create_help_def = "Please say the definition of the word you just added to the set"
 
     help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def}
-    return help_dictionary.get(session.attributes["prev"], "No help available at the time!")
+    return statement(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
 
 @ask.intent("AMAZON.StopIntent")
 def exit():
