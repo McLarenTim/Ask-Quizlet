@@ -10,6 +10,7 @@ def start_skill():
     session.attributes["test_num"] = 0
     session.attributes["final_set"] = {}
     session.attributes["prev"] = "anything"
+    #session.attributes["num_sets"] = 0
 
     #session.attributes["currentkey"] = null
     return question(welcome_message)
@@ -30,7 +31,7 @@ def study():
 #prev word = answer
 @ask.intent("AnswerIntent")
 def answer(ans):
-    if (session.attributes["prev"] == "answer"):
+    if (session.attributes["prev"] == "study"):
         if ans == test_questions[session.attributes["test_num"]]:
             session.attributes['test_num'] += 1
             if session.attributes["test_num"] == len(test_questions):
@@ -82,7 +83,7 @@ def add_definition(definition):
         session.attributes["final_set"][session.attributes["currentkey"]] = definition
         #setting the prev so one can access anything
         session.attributes["prev"] = "anything"
-        msg = "Word and definition added " + session.attributes["currentkey"] + "means" + definition
+        msg = "Word and definition added " + session.attributes["currentkey"] + " means " + definition + " Say create to add a new word"
         return question(msg)
     else:
         msg = "Please continue the function or stop"
@@ -90,7 +91,14 @@ def add_definition(definition):
 
 
 
+@ask.intent("AMAZON.HelpIntent")
+def help():
+    opening_help = "Chose create if you want to make a new set, or chose study if you want to study a pre existing set"
+    create_help_word = "Please say the new word you want to set"
+    create_help_def = "Please say the definition of the word you just added to the set"
 
+    help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def}
+    return help_dictionary.get(session.attributes["prev"], "No help available at the time!")
 
 @ask.intent("AMAZON.StopIntent")
 def exit():

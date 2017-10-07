@@ -10,6 +10,9 @@ Intent Schema:
       "intent": "AMAZON.StopIntent"
     },
     {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
       "intent": "AnswerIntent",
       "slots": [
         {
@@ -48,8 +51,8 @@ StudyIntent study
 
 CreateIntent create
 
-NewWordIntent newWord {word|realword}
+NewWordIntent word {word|realword}
 
-NewDefinitionIntent newWord {word|definition}
+NewDefinitionIntent definition  {the vegetable is green|definition}
 
 AnswerIntent answer {word|ans}
