@@ -9,6 +9,7 @@ def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
     session.attributes["test_num"] = 0
     session.attributes["final_set"] = {};
+    session.attributes["currentkey"] = "No Current Word"
     return question(welcome_message)
 
 test_questions = ["ant", "bee", "cow", "dog"]
@@ -38,7 +39,7 @@ def create():
 @ask.intent("NewWordIntent")
 def newWord(actualWord):
     if (newWord not in session.attributes["final_set"].keys()):
-        session.attributes["final_set"][actualWord] = null
+        #session.attributes["final_set"][actualWord] = null
         session.attributes["currentkey"] = actualWord
         msg = "Please say the definition"
         return question(msg)
