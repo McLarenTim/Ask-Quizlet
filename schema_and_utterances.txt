@@ -60,7 +60,7 @@ StudyIntent study
 
 CreateIntent create
 
-NewWordIntent word {word |realword}
+NewWordIntent word {word for word |realword}
 
 NewDefinitionIntent definition  {the vegetable is green|definition}
 

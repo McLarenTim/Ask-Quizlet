@@ -66,7 +66,7 @@ def newWord(realword):
             #setting prev to newWord, so can only access add_definition after this
             session.attributes["prev"] = "newword"
             session.attributes["currentkey"] = realword
-            msg = "Please say the definition"
+            msg = "Please say the definition of " + realword
             return question(msg)
     else:
         msg = "Please continue the function or stop"
@@ -83,7 +83,7 @@ def add_definition(definition):
         session.attributes["final_set"][session.attributes["currentkey"]] = definition
         #setting the prev so one can access anything
         session.attributes["prev"] = "anything"
-        msg = "Word and definition added " + session.attributes["currentkey"] + " means " + definition + " Say create to add a new word"
+        msg = "Word and definition added " + session.attributes["currentkey"] + " means " + definition + ". Say create to add a new word"
         return question(msg)
     else:
         msg = "Please continue the function or stop"
@@ -93,21 +93,25 @@ def add_definition(definition):
 def delete_word(wordToDelete):
     if(not session.attributes["final_set"]):
         msg = "Your set is empty!"
-        return statement(msg)
+        return question(msg)
     else:
-        session.attributes["final_set"].pop(wordToDelete)
-        msg = "Deleted " + wordToDelete + " and its definition"
-        return statement(msg)
+        if (wordToDelete in session.attributes["final_set"].keys()):
+            session.attributes["final_set"].pop(wordToDelete)
+            msg = "Deleted " + wordToDelete + " and its definition"
+            return question(msg)
+        else:
+            msg = "No such word in the set!"
+            return question(msg)
 
 
 @ask.intent("AMAZON.HelpIntent")
 def help():
-    opening_help = "Chose create if you want to make a new set, or chose study if you want to study a pre existing set"
+    opening_help = "Choose create if you want to make a new set, or choose study if you want to study a pre existing set"
     create_help_word = "Please say the new word you want to set"
     create_help_def = "Please say the definition of the word you just added to the set"
 
     help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def}
-    return statement(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
+    return question(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
 
 @ask.intent("AMAZON.StopIntent")
 def exit():
