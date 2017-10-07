@@ -29,28 +29,28 @@ def answer(ans):
 
 
 #Trying to create and word with a definition
-# @ask.intent("CreateIntent")
-# def create():
-#     msg = "Please tell the word: "
-#     return question(msg)
-#
-# #For adding the word
-# @ask.intent("NewWordIntent")
-# def newWord(actualWord):
-#     if (newWord not in session.attributes["final_set"].keys()):
-#         session.attributes["final_set"][actualWord] = null
-#         session.attributes["currentkey"] = actualWord
-#         msg = "Please say the definition"
-#         return question(msg)
-#     #return create()
-#
-#
-# #For adding the definition
-# @ask.intent("NewDefinitionIntent")
-# def add_definition(definition):
-#     session.attributes["final_set"][session.attributes["currentkey"]] = definition;
-#     msg = "Word and definition added." + session.attributes["currentkey"] + "means" + definition
-#     return question(msg)
+@ask.intent("CreateIntent")
+def create():
+    msg = "Please tell the word: "
+    return question(msg)
+
+#For adding the word
+@ask.intent("NewWordIntent")
+def newWord(actualWord):
+    if (newWord not in session.attributes["final_set"].keys()):
+        session.attributes["final_set"][actualWord] = null
+        session.attributes["currentkey"] = actualWord
+        msg = "Please say the definition"
+        return question(msg)
+    #return create()
+
+
+#For adding the definition
+@ask.intent("NewDefinitionIntent")
+def add_definition(definition):
+    session.attributes["final_set"][session.attributes["currentkey"]] = definition
+    msg = "Word and definition added." + session.attributes["currentkey"] + "means" + definition
+    return question(msg)
 
 
 

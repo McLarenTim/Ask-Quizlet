@@ -2,29 +2,54 @@
 Intent Schema:
 ===================================================
 {
-    "intents": [
+  "intents": [
     {
-        "intent": "StudyIntent"
+      "intent": "StudyIntent"
     },
-
     {
-        "intent": "AMAZON.StopIntent"
+      "intent": "AMAZON.StopIntent"
     },
-
     {
-        "intent": "AnswerIntent",
-        "slots": [{
-            "name": "ans",
-            "type": "AMAZON.LITERAL"
-        }]
-
-    }]
+      "intent": "AnswerIntent",
+      "slots": [
+        {
+          "name": "ans",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "CreateIntent"
+    },
+    {
+      "intent": "NewWordIntent",
+      "slots": [
+        {
+          "name": "actualWord",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "NewDefinitionIntent",
+      "slots": [
+        {
+          "name": "definition",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    }
+  ]
 }
-
 
 Sample Utterances:
 ===================================================
 StudyIntent study
 
-AnswerIntent answer {word|ans}
+CreateIntent create
 
+NewWordIntent newWord {word|actualWord}
+
+NewDefinitionIntent newWord {word|definition}
+
+AnswerIntent answer {word|ans}
