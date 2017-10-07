@@ -34,7 +34,7 @@ def study():
         # session.attributes["current_word"] = choice(list(session.attributes["set"].keys()))
         msg = ""
         if session.attributes["current_correctness"] != 0:
-            if session.attributes["current_correctness"]:
+            if session.attributes["current_correctness"] == 2:
                 msg += "Correct! "
             else:
                 msg += "Incorrect. The word was: " + session.attributes["current_word"] + ". "
@@ -51,9 +51,9 @@ def study():
 def answer(ans):
     if (session.attributes["prev"] == "answer"):
         if ans == session.attributes["current_word"]:
-            session.attributes["current_correctness"] = True
+            session.attributes["current_correctness"] = 2
         else:
-            session.attributes["current_correctness"] = False
+            session.attributes["current_correctness"] = 1
         session.attributes["prev"] = "anything"
         return study()
     else:
