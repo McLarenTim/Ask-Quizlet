@@ -33,7 +33,7 @@ Intent Schema:
       "intent": "NewWordIntent",
       "slots": [
         {
-          "name": "actualWord",
+          "name": "realword",
           "type": "AMAZON.LITERAL"
         }
       ]
@@ -56,9 +56,13 @@ StudyIntent study
 
 CreateIntent create
 
+<<<<<<< HEAD
 AnswerIntent answer {word|ans}
 
 NewWordIntent newWord {word|actualWord}
+=======
+NewWordIntent newWord {word|realword}
+>>>>>>> ffc7d95dbec25311fcfd3788966b3ca82d359e91
 
 NewDefinitionIntent newWord {word|definition}
 

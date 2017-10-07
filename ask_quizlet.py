@@ -16,7 +16,10 @@ test_questions = ["ant", "bob", "cow", "dog"]
 def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
     session.attributes["test_num"] = 0
-    session.attributes["final_set"] = {};
+    session.attributes["final_set"] = {}
+    session.attributes["prev"] = "anything"
+
+    #session.attributes["currentkey"] = null
     return question(welcome_message)
 
 @ask.intent("CreateIntent")
@@ -29,50 +32,76 @@ def create():
 
 @ask.intent("StudyIntent")
 def study():
-    print("study")
-    if session.attributes["state"] not in ["start", "study"]:
-        return question("Invalid Input.")
-    msg = "Please say back the word: "
-    msg += test_questions[session.attributes["test_num"]]
-    session.attributes["state"] = "await_ans"
-    return question(msg)
+    #only if have not called any other function
+    if (session.attributes["prev"] == "anything" or session.attributes["prev"] == "answer"):
+        msg = "Please say back the word: "
+        msg += test_questions[session.attributes["test_num"]]
+        session.attributes["prev"] = "study"
+        return question(msg)
+    else:
+        msg = "Please continue the function or stop"
+        return question(msg)
 
+#prev word = answer
 @ask.intent("AnswerIntent")
 def answer(ans):
-    if session.attributes["state"] not in ["await_ans"]:
-        return question("Invalid Input.")
-    if ans == test_questions[session.attributes["test_num"]]:
-        session.attributes['test_num'] += 1
-        if session.attributes["test_num"] == len(test_questions):
-            return statement("Congrats, you said all the words.")
-        session.attributes["state"] = "study"
-        return study()
-    return question("You fucked up.")
-
+    if (session.attributes["prev"] == "answer"):
+        if ans == test_questions[session.attributes["test_num"]]:
+            session.attributes['test_num'] += 1
+            if session.attributes["test_num"] == len(test_questions):
+                return statement("Congrats, you said all the words.")
+            return study()
+        return question("You fucked up.")
+    else:
+        msg = "Please continue the function or stop"
+        return question(msg)
 
 #Trying to create and word with a definition
+#prev word = create
 @ask.intent("CreateIntent")
 def create():
-    msg = "Please tell the word: "
-    return question(msg)
+    if(session.attributes["prev"] == "anything"):
+        session.attributes["prev"] = "create"
+        msg = "Please tell the word: "
+        return question(msg)
+    else:
+        msg = "Please continue the proper function or stop"
+        return question(msg)
 
 #For adding the word
+#Have to say actualWord before word
+#prev word = newword
 @ask.intent("NewWordIntent")
-def newWord(actualWord):
-    if (newWord not in session.attributes["final_set"].keys()):
-        session.attributes["final_set"][actualWord] = null
-        session.attributes["currentkey"] = actualWord
-        msg = "Please say the definition"
+def newWord(realword):
+
+    if(session.attributes["prev"] == "create"):
+        if (newWord not in session.attributes["final_set"].keys()):
+            #session.attributes["final_set"][actualWord] = null
+            #setting prev to newWord, so can only access add_definition after this
+            session.attributes["prev"] = "newword"
+            session.attributes["currentkey"] = realword
+            msg = "Please say the definition"
+            return question(msg)
+    else:
+        msg = "Please continue the function or stop"
         return question(msg)
     #return create()
 
 
 #For adding the definition
+#Have to say the definition
+#prev word = anything
 @ask.intent("NewDefinitionIntent")
 def add_definition(definition):
-    session.attributes["final_set"][session.attributes["currentkey"]] = definition
-    msg = "Word and definition added." + session.attributes["currentkey"] + "means" + definition
-    return question(msg)
+    if(session.attributes["prev"] == "newword"):
+        session.attributes["final_set"][session.attributes["currentkey"]] = definition
+        #setting the prev so one can access anything
+        session.attributes["prev"] = "anything"
+        msg = "Word and definition added " + session.attributes["currentkey"] + "means" + definition
+        return question(msg)
+    else:
+        msg = "Please continue the function or stop"
+        return question(msg)
 
 
 
