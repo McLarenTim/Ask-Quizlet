@@ -12,6 +12,15 @@ Intent Schema:
       "intent": "AMAZON.HelpIntent"
     },
     {
+      "intent": "DeleteEntryIntent",
+      "slots": [
+        {
+          "name": "wordToDelete",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
       "intent": "AnswerIntent",
       "slots": [
         {
@@ -50,8 +59,10 @@ StudyIntent study
 
 CreateIntent create
 
-NewWordIntent word {word|realword}
+NewWordIntent word {word for word |realword}
 
 NewDefinitionIntent definition  {the vegetable is green|definition}
+
+DeleteEntryIntent delete {word and word|wordToDelete}
 
 AnswerIntent answer {word|ans}
