@@ -8,6 +8,10 @@ Intent Schema:
     },
 
     {
+        "intent": "CreateIntent"
+    },
+
+    {
         "intent": "AMAZON.StopIntent"
     },
 
@@ -26,5 +30,9 @@ Sample Utterances:
 ===================================================
 StudyIntent study
 
+CreateIntent create
+
 AnswerIntent answer {word|ans}
+AnswerIntent answer {wordly|ans}
+AnswerIntent answer {wording|ans}
 
