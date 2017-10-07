@@ -1,0 +1,30 @@
+
+Intent Schema:
+===================================================
+{
+    "intents": [
+    {
+        "intent": "StudyIntent"
+    },
+
+    {
+        "intent": "AMAZON.StopIntent"
+    },
+
+    {
+        "intent": "AnswerIntent",
+        "slots": [{
+            "name": "ans",
+            "type": "AMAZON.LITERAL"
+        }]
+
+    }]
+}
+
+
+Sample Utterances:
+===================================================
+StudyIntent study
+
+AnswerIntent answer {word|ans}
+

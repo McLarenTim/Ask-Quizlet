@@ -9,7 +9,6 @@ def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
     session.attributes["test_num"] = 0
     session.attributes["final_set"] = {};
-    session.attributes["currentkey"] = null
     return question(welcome_message)
 
 test_questions = ["ant", "bee", "cow", "dog"]
@@ -27,6 +26,7 @@ def answer(ans):
             return statement("Congrats, you said all the words.")
         return study()
     return question("You fucked up.")
+
 
 #Trying to create and word with a definition
 # @ask.intent("CreateIntent")
@@ -51,6 +51,7 @@ def answer(ans):
 #     session.attributes["final_set"][session.attributes["currentkey"]] = definition;
 #     msg = "Word and definition added." + session.attributes["currentkey"] + "means" + definition
 #     return question(msg)
+
 
 
 
