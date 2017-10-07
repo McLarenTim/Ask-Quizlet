@@ -89,6 +89,15 @@ def add_definition(definition):
         msg = "Please continue the function or stop"
         return question(msg)
 
+@ask.intent("DeleteEntryIntent")
+def delete_word(wordToDelete):
+    if(not session.attributes["final_set"]):
+        msg = "Your set is empty!"
+        return statement(msg)
+    else:
+        session.attributes["final_set"].pop(wordToDelete)
+        msg = "Deleted " + wordToDelete + " and its definition"
+        return statement(msg)
 
 
 @ask.intent("AMAZON.HelpIntent")
