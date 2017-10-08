@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_ask import Ask, statement, question, session
 from random import choice
+import requests
+import json
+url = "https://api.quizlet.com/2.0/sets/415"
 
 app = Flask(__name__)
 ask = Ask(app, "/")
@@ -121,6 +124,45 @@ def answer(ans):
         session.attributes["recentMessage"] = msg
         return question(msg)
 
+def term_definition_generator(access_code):
+#input whatever access_code the access_code runner gives
+    headers = {
+        'client_id': "wBnJTc87dG",
+        'whitespace': "1",
+        'Authorization': "Bearer " + access_code
+        }
+
+    #gets the necessary data
+    response = requests.request("GET", url, headers=headers)
+    #converts json file into dictionary
+    json_data= json.loads(response.text)
+
+
+    #Get dictionary of terms
+    terms_dictionary = json_data['terms']
+    #terms
+    terms = []
+    #definitions
+    definitions = []
+    for dict in terms_dictionary:
+        terms += [dict['term']]
+        definitions += [dict['definition']]
+
+    return terms, definitions
+
+@ask.intent("ImportIntent")
+def importSet():
+    if (session.attributes["prev"] == "anything"):
+        terms, definitions = term_definition_generator("V6CmYcRnvjefHspFECEZaxwhvTp32gc7XSgqm5RD")
+        session.attributes["sets"]["state capitals"] = dict(zip(terms, definitions))
+        msg = "State Cpaitals imported to your sets"
+        session.attributes["recentMessage"] = msg
+        return question(msg)
+    else:
+        msg = "Please continue the proper function or stop"
+        session.attributes["recentMessage"] = msg
+        return question(msg)
+    
 #Trying to create and word with a definition
 #prev word = create
 @ask.intent("CreateIntent")
@@ -134,6 +176,7 @@ def create():
         msg = "Please continue the proper function or stop"
         session.attributes["recentMessage"] = msg
         return question(msg)
+
 
 #For adding the word
 #Have to say actualWord before word
