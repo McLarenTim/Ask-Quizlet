@@ -211,7 +211,7 @@ def help():
 
 @ask.intent("AMAZON.StopIntent")
 def exit():
-    if (session.attributes["prev"] == "answer"):
+    if (session.attributes["prev"] == "test" or session.attributes["prev"] == "study"):
         session.attributes["prev"] = "anything"
         return question("Ending study session.")
     return statement("Quitting Ask Quizlet.")
