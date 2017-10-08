@@ -16,7 +16,26 @@ def start_skill():
             "remiss": "lax in attending to duty; exhibiting carelessness",
             "ruminate": "meditate at length; ponder; muse; chew cud"
         },
-        "my set": {}
+        "economics": {
+            "deflation": "a decrease in the average price of all goods and services"
+            "consumer": "someone who buys and uses goods and services"
+            "embargo": "a government policy that cuts off trade with certain countries"
+            "expansion": "a period of time during which the amount of business (GDP) increases"
+        },
+
+        "biology": {
+            "diploid": "an organism or cell having two sets of chromosomes or twice the haploid number"
+            "nucleus": "a part of the cell containing DNA and RNA and responsible for growth and reproduction"
+            "pedigree": "a diagram that shows the occurrence of a genetic trait in several generations of a family"
+            "heredity": "the biological process whereby genetic factors are transmitted from one generation to the next"
+        },
+
+        "chemistry": {
+            "suspension": "Heterogeneous mixture containing a liquid where visible particles settle."
+            "distillation": "A process for separating substances by evaporating a liquid and recondensing its vapor."
+            "diffusion": "Spreading of particles throughout a given volume until they are distributed."
+            "viscosity": "The resistance to flow by a fluid."
+        }
     }
     session.attributes["prev"] = "anything"
     session.attributes["currentword"] = ""
