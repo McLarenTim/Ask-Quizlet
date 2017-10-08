@@ -8,7 +8,7 @@ ask = Ask(app, "/")
 @ask.launch
 def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
-    session.attributes["set"] = {}
+    session.attributes["final_set"] = {}
     session.attributes["test_set"] = {
         "ascertain": "discover through examination or experimentation; determine",
         "avenge": "take revenge on or get satisfaction for; take vengeance on behalf of",
@@ -32,15 +32,21 @@ def create():
 @ask.intent("StudyIntent")
 def study():
     if (session.attributes["prev"] == "anything"):
-        # session.attributes["current_word"] = choice(list(session.attributes["set"].keys()))
+        # session.attributes["current_word"] = choice(list(session.attributes["final_set"].keys()))
+        ####################
+        if len(session.attributes["final_set"]) == 0:
+            return question("Your study set is empty.")
+        ####################
         msg = ""
         if session.attributes["current_correctness"] != 0:
             if session.attributes["current_correctness"] == 2:
                 msg += "Correct! "
             else:
                 msg += "Incorrect. The word was: " + session.attributes["current_word"] + ". "
-        session.attributes["current_word"] = choice(list(session.attributes["test_set"].keys()))
-        msg += "What is the word for: " + session.attributes["test_set"][session.attributes["current_word"]]
+        ####################
+        session.attributes["current_word"] = choice(list(session.attributes["final_set"].keys()))
+        msg += "What is the word for: " + session.attributes["final_set"][session.attributes["current_word"]]
+        ####################
         session.attributes["prev"] = "answer"
         return question(msg)
     else:
@@ -79,8 +85,8 @@ def create():
 @ask.intent("NewWordIntent")
 def newWord(realword):
     if(session.attributes["prev"] == "create"):
-        if (newWord not in session.attributes["set"].keys()):
-            #session.attributes["set"][actualWord] = null
+        if (newWord not in session.attributes["final_set"].keys()):
+            #session.attributes["final_set"][actualWord] = null
             #setting prev to newWord, so can only access add_definition after this
             session.attributes["prev"] = "newword"
             session.attributes["currentkey"] = realword
@@ -98,7 +104,7 @@ def newWord(realword):
 @ask.intent("NewDefinitionIntent")
 def add_definition(definition):
     if(session.attributes["prev"] == "newword"):
-        session.attributes["set"][session.attributes["currentkey"]] = definition
+        session.attributes["final_set"][session.attributes["currentkey"]] = definition
         #setting the prev so one can access anything
         session.attributes["prev"] = "anything"
         msg = "Word and definition added: " + session.attributes["currentkey"] + " means " + definition + ". Say create to add a new word."
