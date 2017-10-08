@@ -7,7 +7,7 @@ ask = Ask(app, "/")
 
 @ask.launch
 def start_skill():
-    welcome_message = "Welcome to Ask Quizlet! Would you like to study, be tested on, or create a flash card set?"
+    welcome_message = "Welcome to Flash Learner! Would you like to study, be tested on, or create a flash card set?"
     session.attributes["sets"] = {
         "english": {
             "ascertain": "discover through examination or experimentation; determine",
@@ -91,9 +91,7 @@ def decider(correctness=None):
             session.attributes["currentset"].pop(session.attributes["currentword"])
             if len(session.attributes["currentset"]) == 0:
                 session.attributes["prev"] = "anything"
-                msg2 = "Congratulations! You finished the study set!"
-                session.attributes["recentMessage"] = msg2
-                return question(msg2)
+                return question("Congratulations! You finished the test! Your score was " + str(session.attributes["testscore"]) + " out of " + str(session.attributes["testtotal"]) + ". ")
         else:
             if correctness:
                 msg += "Correct! "
@@ -214,7 +212,7 @@ def exit():
     if (session.attributes["prev"] == "test" or session.attributes["prev"] == "study"):
         session.attributes["prev"] = "anything"
         return question("Ending study session.")
-    return statement("Quitting Ask Quizlet.")
+    return statement("Quitting Flash Learner.")
 
 if __name__ == '__main__':
     app.run(debug=True)
