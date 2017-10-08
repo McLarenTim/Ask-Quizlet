@@ -18,6 +18,9 @@ Intent Schema:
       "intent": "AMAZON.HelpIntent"
     },
     {
+      "intent": "AMAZON.RepeatIntent"
+    },
+    {
       "intent": "DeleteEntryIntent",
       "slots": [
         {
