@@ -180,7 +180,9 @@ def help():
                       "definition. a place for coders to make cool stuff"
     answer_help = "Please say the correct word describing the statement."
     help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def, "answer":answer_help}
-    return question(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
+    msg = help_dictionary.get(session.attributes["prev"], "No help available at the time!")
+    session.attributes["recentMessage"] = msg
+    return question(msg)
 
 @ask.intent("AMAZON.StopIntent")
 def exit():
