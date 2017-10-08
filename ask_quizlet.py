@@ -40,21 +40,29 @@ def start_skill():
     session.attributes["currentword"] = ""
     session.attributes["currentset"] = {}
     session.attributes["currentkey"] = ""
+    session.attributes["recentMessage"] = welcome_message
     return question(welcome_message)
 
 @ask.intent("StudyIntent")
 def study(setname):
     if (session.attributes["prev"] == "anything"):
         if not setname:
-            return question("Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
+            msg = "Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys()))
+            session.attributes["recentMessage"] = msg
+            return question(msg)
         if setname not in session.attributes["sets"].keys():
-            return question("I cannot find that study set.")
+            msg = "I cannot find that study set."
+            session.attributes["recentMessage"] = msg
+            return question(msg)
         if len(session.attributes["sets"][setname]) == 0:
-            return question("That study set is empty.")
+            msg = "That study set is empty."
+            session.attributes["recentMessage"] = msg
+            return question(msg)
         session.attributes["currentset"] = session.attributes["sets"][setname].copy()
         return askword()
     else:
         msg = "Please continue the function or stop."
+        session.attributes["recentMessage"] = msg
         return question(msg)
 
 def askword(correctness=None):
@@ -65,12 +73,15 @@ def askword(correctness=None):
             session.attributes["currentset"].pop(session.attributes["currentword"])
             if len(session.attributes["currentset"]) == 0:
                 session.attributes["prev"] = "anything"
-                return question("Congratulations! You finished the study set!")
+                msg2 = "Congratulations! You finished the study set!"
+                session.attributes["recentMessage"] = msg2
+                return question(msg2)
         else:
             msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
     session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
     msg += "What is the word for: " + session.attributes["currentset"][session.attributes["currentword"]]
     session.attributes["prev"] = "answer"
+    session.attributes["recentMessage"] = msg
     return question(msg)
 
 #prev word = answer
@@ -84,6 +95,7 @@ def answer(ans):
         return study()
     else:
         msg = "Please continue the function or stop."
+        session.attributes["recentMessage"] = msg
         return question(msg)
 
 #Trying to create and word with a definition
@@ -93,9 +105,11 @@ def create():
     if(session.attributes["prev"] == "anything"):
         session.attributes["prev"] = "create"
         msg = "Please say the word."
+        session.attributes["recentMessage"] = msg
         return question(msg)
     else:
         msg = "Please continue the proper function or stop"
+        session.attributes["recentMessage"] = msg
         return question(msg)
 
 #For adding the word
@@ -109,9 +123,11 @@ def newWord(realword):
             session.attributes["prev"] = "newword"
             session.attributes["currentkey"] = realword
             msg = "Please say the definition of: " + realword
+            session.attributes["recentMessage"] = msg
             return question(msg)
     else:
         msg = "Please continue the function or stop"
+        session.attributes["recentMessage"] = msg
         return question(msg)
     #return create()
 
@@ -126,24 +142,33 @@ def add_definition(definition):
         #setting the prev so one can access anything
         session.attributes["prev"] = "anything"
         msg = "Word and definition added: " + session.attributes["currentkey"] + " means " + definition + ". Say create to add a new word."
+        session.attributes["recentMessage"] = msg
         return question(msg)
     else:
         msg = "Please continue the function or stop"
+        session.attributes["recentMessage"] = msg
         return question(msg)
 
 @ask.intent("DeleteEntryIntent")
 def delete_word(wordToDelete):
     if(not session.attributes["sets"]["my set"]):
         msg = "Your set is empty!"
+        session.attributes["recentMessage"] = msg
         return question(msg)
     else:
         if (wordToDelete in session.attributes["sets"]["my set"].keys()):
             session.attributes["sets"]["my set"].pop(wordToDelete)
             msg = "Deleted " + wordToDelete + " and its definition"
+            session.attributes["recentMessage"] = msg
             return question(msg)
         else:
             msg = "No such word in the set!"
+            session.attributes["recentMessage"] = msg
             return question(msg)
+
+@ask.intent("AMAZON.RepeatIntent")
+def replay():
+    return question(session.attributes["recentMessage"])
 
 
 @ask.intent("AMAZON.HelpIntent")
