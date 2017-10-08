@@ -87,7 +87,7 @@ def decider(correctness=None):
                 msg += "Correct! "
                 session.attributes["testscore"] += 1
             else:
-                msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
+                msg += "Incorrect. The answer was: " + session.attributes["currentword"] + ". "
             session.attributes["currentset"].pop(session.attributes["currentword"])
             if len(session.attributes["currentset"]) == 0:
                 session.attributes["prev"] = "anything"
@@ -102,7 +102,7 @@ def decider(correctness=None):
                     session.attributes["recentMessage"] = msg3
                     return question(msg3)
             else:
-                msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
+                msg += "Incorrect. The answer was: " + session.attributes["currentword"] + ". "
     session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
     msg += "What is the word for: " + session.attributes["currentset"][session.attributes["currentword"]]
     session.attributes["recentMessage"] = msg
