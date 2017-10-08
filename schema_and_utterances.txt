@@ -63,6 +63,7 @@ Sample Utterances:
 ===================================================
 StudyIntent study {my set | setname}
 StudyIntent study {test set | setname}
+StudyIntent study
 
 CreateIntent create
 

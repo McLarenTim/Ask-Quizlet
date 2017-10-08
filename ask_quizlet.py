@@ -27,6 +27,8 @@ def start_skill():
 @ask.intent("StudyIntent")
 def study(setname):
     if (session.attributes["prev"] == "anything"):
+        if setname == None:
+            return question("Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
         if session.attributes["sets"][setname] == None:
             return question("I cannot find that study set.")
         if len(session.attributes["sets"][setname]) == 0:
