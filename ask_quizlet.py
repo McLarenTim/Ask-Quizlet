@@ -9,7 +9,7 @@ ask = Ask(app, "/")
 def start_skill():
     welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
     session.attributes["sets"] = {
-        "test set": {
+        "SAT Vocabulary": {
             "ascertain": "discover through examination or experimentation; determine",
             "avenge": "take revenge on or get satisfaction for; take vengeance on behalf of",
             "chicanery": "deception by trickery; trick",
@@ -29,7 +29,7 @@ def study(setname):
     if (session.attributes["prev"] == "anything"):
         if not setname:
             return question("Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
-        if session.attributes["sets"][setname] == None:
+        if setname not in session.attributes["sets"].keys():
             return question("I cannot find that study set.")
         if len(session.attributes["sets"][setname]) == 0:
             return question("That study set is empty.")
