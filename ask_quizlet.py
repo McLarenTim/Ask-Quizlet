@@ -127,8 +127,9 @@ def delete_word(wordToDelete):
 @ask.intent("AMAZON.HelpIntent")
 def help():
     opening_help = "Choose create if you want to make a new set, or choose study if you want to study a pre existing set"
-    create_help_word = "Please say the new word you want to set"
-    create_help_def = "Please say the definition of the word you just added to the set"
+    create_help_word = "Please say the new word you want to set. For example. say: word. hackathon"
+    create_help_def = "Please say the definition of the word you just added to the set. For example. say:" \
+                      "definition. a place for coders to make cool stuff"
     help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def}
     return question(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
 
