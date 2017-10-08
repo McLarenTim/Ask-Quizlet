@@ -51,6 +51,9 @@ Intent Schema:
       "intent": "CreateIntent"
     },
     {
+      "intent": "ImportIntent"
+    },
+    {
       "intent": "NewWordIntent",
       "slots": [
         {
@@ -82,6 +85,8 @@ TestIntent test {test set | setname}
 TestIntent test
 
 CreateIntent create
+
+ImportIntent import
 
 NewWordIntent word {word for word | realword}
 
