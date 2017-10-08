@@ -33,7 +33,7 @@ def study(setname):
             return question("I cannot find that study set.")
         if len(session.attributes["sets"][setname]) == 0:
             return question("That study set is empty.")
-        session.attributes["currentset"] = session.attributes["sets"][setname]
+        session.attributes["currentset"] = session.attributes["sets"][setname].copy()
         return askword()
     else:
         msg = "Please continue the function or stop."
@@ -44,6 +44,10 @@ def askword(correctness=None):
     if correctness != None:
         if correctness:
             msg += "Correct! "
+            session.attributes["currentset"].pop(session.attributes["currentword"])
+            if len(session.attributes["currentset"]) == 0:
+                session.attributes["prev"] = "anything"
+                return question("Congratulations! You finished the study set!")
         else:
             msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
     session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
@@ -127,11 +131,11 @@ def delete_word(wordToDelete):
 @ask.intent("AMAZON.HelpIntent")
 def help():
 
-    opening_help = "Choose create if you want to make a new set, or choose study if you want to study a pre existing set"
+    opening_help = "Choose create if you want to make a new set, or choose study if you want to study a pre existing set."
     create_help_word = "Please say the new word you want to set. For example. say: word. hackathon"
     create_help_def = "Please say the definition of the word you just added to the set. For example. say:" \
                       "definition. a place for coders to make cool stuff"
-    answer_help = "Please say the correct word decribing the statement."
+    answer_help = "Please say the correct word describing the statement."
     help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def, "answer":answer_help}
     return question(help_dictionary.get(session.attributes["prev"], "No help available at the time!"))
 
