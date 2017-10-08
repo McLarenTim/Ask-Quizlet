@@ -27,7 +27,7 @@ def start_skill():
 @ask.intent("StudyIntent")
 def study(setname):
     if (session.attributes["prev"] == "anything"):
-        if setname == None:
+        if not setname:
             return question("Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
         if session.attributes["sets"][setname] == None:
             return question("I cannot find that study set.")
@@ -46,7 +46,7 @@ def askword(correctness=None):
             msg += "Correct! "
         else:
             msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
-    session.attributes["qcurrentword"] = choice(list(session.attributes["currentset"].keys()))
+    session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
     msg += "What is the word for: " + session.attributes["currentset"][session.attributes["currentword"]]
     session.attributes["prev"] = "answer"
     return question(msg)
