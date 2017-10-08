@@ -7,7 +7,7 @@ ask = Ask(app, "/")
 
 @ask.launch
 def start_skill():
-    welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
+    welcome_message = "Welcome to Ask Quizlet! Would you like to study, be tested on, or create a flash card set?"
     session.attributes["sets"] = {
         "english": {
             "ascertain": "discover through examination or experimentation; determine",
@@ -17,9 +17,7 @@ def start_skill():
             "ruminate": "meditate at length; ponder; muse; chew cud"
         },
         "economics": {
-            "deflation": "a decrease in the average price of all goods and services",
             "consumer": "someone who buys and uses goods and services",
-            "embargo": "a government policy that cuts off trade with certain countries",
             "expansion": "a period of time during which the amount of business (GDP) increases"
         },
         "biology": {
@@ -56,7 +54,7 @@ def test(setname):
 def begin(setname, testmode):
     if (session.attributes["prev"] == "anything"):
         if not setname:
-            return question("Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
+            return question("Please say study or test followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys())))
         if setname not in session.attributes["sets"].keys():
             return question("I cannot find that study set.")
         if len(session.attributes["sets"][setname]) == 0:
@@ -85,7 +83,7 @@ def decider(correctness=None):
             session.attributes["currentset"].pop(session.attributes["currentword"])
             if len(session.attributes["currentset"]) == 0:
                 session.attributes["prev"] = "anything"
-                return question("Congratulations! You finished the test! Your score was " + session.attributes["testscore"] + " out of " + session.attributes["testtotal"] + ". ")
+                return question("Congratulations! You finished the test! Your score was " + str(session.attributes["testscore"]) + " out of " + str(session.attributes["testtotal"]) + ". ")
         else:
             if correctness:
                 msg += "Correct! "
