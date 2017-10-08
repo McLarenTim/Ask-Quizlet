@@ -115,7 +115,7 @@ def decider(correctness=None):
 @ask.intent("AnswerIntent")
 def answer(ans):
     if (session.attributes["prev"] == "test" or session.attributes["prev"] == "study"):
-        if ans == session.attributes["currentword"]:
+        if ans == session.attributes["currentword"].lower():
             return decider(correctness=True)
         else:
             return decider(correctness=False)
@@ -155,7 +155,7 @@ def importSet():
     if (session.attributes["prev"] == "anything"):
         terms, definitions = term_definition_generator("V6CmYcRnvjefHspFECEZaxwhvTp32gc7XSgqm5RD")
         session.attributes["sets"]["state capitals"] = dict(zip(terms, definitions))
-        msg = "State Cpaitals imported to your sets"
+        msg = "State Capitals imported to your sets"
         session.attributes["recentMessage"] = msg
         return question(msg)
     else:
