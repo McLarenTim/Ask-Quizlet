@@ -3,7 +3,13 @@ Intent Schema:
 {
   "intents": [
     {
-      "intent": "StudyIntent"
+      "intent": "StudyIntent",
+      "slots": [
+        {
+          "name": "setname",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
     },
     {
       "intent": "AMAZON.StopIntent"
@@ -55,14 +61,15 @@ Intent Schema:
 
 Sample Utterances:
 ===================================================
-StudyIntent study
+StudyIntent study {my set | setname}
+StudyIntent study {test set | setname}
 
 CreateIntent create
 
-NewWordIntent word {word for word |realword}
+NewWordIntent word {word for word | realword}
 
-NewDefinitionIntent definition  {the vegetable is green|definition}
+NewDefinitionIntent definition  {the vegetable is green | definition}
 
-DeleteEntryIntent delete {word and word|wordToDelete}
+DeleteEntryIntent delete {word for word | wordToDelete}
 
-AnswerIntent answer {word|ans}
+AnswerIntent answer {word for word | ans}
