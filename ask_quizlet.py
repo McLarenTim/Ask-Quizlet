@@ -46,7 +46,7 @@ def askword(correctness=None):
             msg += "Correct! "
         else:
             msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
-    session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
+    session.attributes["qcurrentword"] = choice(list(session.attributes["currentset"].keys()))
     msg += "What is the word for: " + session.attributes["currentset"][session.attributes["currentword"]]
     session.attributes["prev"] = "answer"
     return question(msg)
@@ -136,7 +136,7 @@ def help():
 @ask.intent("AMAZON.StopIntent")
 def exit():
     if (session.attributes["prev"] == "answer"):
-        session.attributes["prev"] == "anything"
+        session.attributes["prev"] = "anything"
         return question("Ending study session.")
     return statement("Quitting Ask Quizlet.")
 
