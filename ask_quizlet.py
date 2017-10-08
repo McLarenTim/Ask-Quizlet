@@ -7,7 +7,7 @@ ask = Ask(app, "/")
 
 @ask.launch
 def start_skill():
-    welcome_message = "Welcome to Ask Quizlet! Would you like to study or create a flash card set?"
+    welcome_message = "Welcome to Ask Quizlet! Would you like to study, be tested on, or create a flash card set?"
     session.attributes["sets"] = {
         "english": {
             "ascertain": "discover through examination or experimentation; determine",
@@ -17,9 +17,7 @@ def start_skill():
             "ruminate": "meditate at length; ponder; muse; chew cud"
         },
         "economics": {
-            "deflation": "a decrease in the average price of all goods and services",
             "consumer": "someone who buys and uses goods and services",
-            "embargo": "a government policy that cuts off trade with certain countries",
             "expansion": "a period of time during which the amount of business (GDP) increases"
         },
         "biology": {
@@ -41,10 +39,20 @@ def start_skill():
     session.attributes["currentset"] = {}
     session.attributes["currentkey"] = ""
     session.attributes["recentMessage"] = welcome_message
+    session.attributes["testmode"] = False
+    session.attributes["testscore"] = 0
+    session.attributes["testtotal"] = 0
     return question(welcome_message)
 
 @ask.intent("StudyIntent")
 def study(setname):
+    return begin(setname, False)
+
+@ask.intent("TestIntent")
+def test(setname):
+    return begin(setname, True)
+
+def begin(setname, testmode):
     if (session.attributes["prev"] == "anything"):
         if not setname:
             msg = "Please say study followed by a set name. Current available sets are: " + ", ".join(list(session.attributes["sets"].keys()))
@@ -59,17 +67,27 @@ def study(setname):
             session.attributes["recentMessage"] = msg
             return question(msg)
         session.attributes["currentset"] = session.attributes["sets"][setname].copy()
-        return askword()
+        if testmode:
+            session.attributes["testscore"] = 0
+            session.attributes["testtotal"] = len(session.attributes["sets"][setname])
+            session.attributes["prev"] = "test"
+        else:
+            session.attributes["prev"] = "study"
+        return decider()
     else:
         msg = "Please continue the function or stop."
         session.attributes["recentMessage"] = msg
         return question(msg)
 
-def askword(correctness=None):
+def decider(correctness=None):
     msg = ""
     if correctness != None:
-        if correctness:
-            msg += "Correct! "
+        if session.attributes["prev"] == "test":
+            if correctness:
+                msg += "Correct! "
+                session.attributes["testscore"] += 1
+            else:
+                msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
             session.attributes["currentset"].pop(session.attributes["currentword"])
             if len(session.attributes["currentset"]) == 0:
                 session.attributes["prev"] = "anything"
@@ -77,22 +95,29 @@ def askword(correctness=None):
                 session.attributes["recentMessage"] = msg2
                 return question(msg2)
         else:
-            msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
+            if correctness:
+                msg += "Correct! "
+                session.attributes["currentset"].pop(session.attributes["currentword"])
+                if len(session.attributes["currentset"]) == 0:
+                    session.attributes["prev"] = "anything"
+                    msg3 = "Congratulations! You finished the study set!"
+                    session.attributes["recentMessage"] = msg3
+                    return question(msg3)
+            else:
+                msg += "Incorrect. The word was: " + session.attributes["currentword"] + ". "
     session.attributes["currentword"] = choice(list(session.attributes["currentset"].keys()))
     msg += "What is the word for: " + session.attributes["currentset"][session.attributes["currentword"]]
-    session.attributes["prev"] = "answer"
     session.attributes["recentMessage"] = msg
     return question(msg)
 
 #prev word = answer
 @ask.intent("AnswerIntent")
 def answer(ans):
-    if (session.attributes["prev"] == "answer"):
+    if (session.attributes["prev"] == "test" or session.attributes["prev"] == "study"):
         if ans == session.attributes["currentword"]:
-            return askword(True)
+            return decider(correctness=True)
         else:
-            return askword(False)
-        return study()
+            return decider(correctness=False)
     else:
         msg = "Please continue the function or stop."
         session.attributes["recentMessage"] = msg
@@ -178,8 +203,8 @@ def help():
     create_help_word = "Please say the new word you want to set. For example. say: word. hackathon"
     create_help_def = "Please say the definition of the word you just added to the set. For example. say:" \
                       "definition. a place for coders to make cool stuff"
-    answer_help = "Please say the correct word describing the statement."
-    help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def, "answer":answer_help}
+    answer_help = "Please say the correct word describing the definition."
+    help_dictionary = {"anything": opening_help, "create": create_help_word, "newword":create_help_def, "test":answer_help, "study":answer_help}
     msg = help_dictionary.get(session.attributes["prev"], "No help available at the time!")
     session.attributes["recentMessage"] = msg
     return question(msg)

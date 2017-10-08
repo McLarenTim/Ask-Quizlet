@@ -12,6 +12,15 @@ Intent Schema:
       ]
     },
     {
+      "intent": "TestIntent",
+      "slots": [
+        {
+          "name": "setname",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.StopIntent"
     },
     {
@@ -67,6 +76,10 @@ Sample Utterances:
 StudyIntent study {my set | setname}
 StudyIntent study {test set | setname}
 StudyIntent study
+
+TestIntent test {my set | setname}
+TestIntent test {test set | setname}
+TestIntent test
 
 CreateIntent create
 
